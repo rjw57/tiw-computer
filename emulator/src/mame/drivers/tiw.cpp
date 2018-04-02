@@ -36,7 +36,7 @@ public:
 void tiw_state::tiw_mem(address_map &map)
 {
 	map(0x0000, 0x7FFF).ram().share("ram");
-	map(0xD000, 0xD00F).rw(UART0_TAG, FUNC(ns16450_device::ins8250_r), FUNC(ns16450_device::ins8250_w)).umask16(0x00ff);
+	map(0xD000, 0xD007).rw(UART0_TAG, FUNC(ns16450_device::ins8250_r), FUNC(ns16450_device::ins8250_w)).umask16(0x00ff);
 	map(0xE000, 0xFFFF).rom().region("maincpu", 0);
 }
 
@@ -44,10 +44,10 @@ static INPUT_PORTS_START(tiw)
 INPUT_PORTS_END
 
 MACHINE_CONFIG_START(tiw_state::tiw)
-	MCFG_CPU_ADD("maincpu", M6502, XTAL(4'000'000))
+	MCFG_CPU_ADD("maincpu", M6502, XTAL(6'144'000))
 	MCFG_CPU_PROGRAM_MAP(tiw_mem)
 
-	MCFG_DEVICE_ADD(UART0_TAG, NS16450, XTAL(1'843'200))
+	MCFG_DEVICE_ADD(UART0_TAG, NS16450, XTAL(6'144'000))
 	MCFG_INS8250_OUT_DTR_CB(DEVWRITELINE(RS232A_TAG, rs232_port_device, write_dtr))
 	MCFG_INS8250_OUT_RTS_CB(DEVWRITELINE(RS232A_TAG, rs232_port_device, write_rts))
 	MCFG_INS8250_OUT_TX_CB(DEVWRITELINE(RS232A_TAG, rs232_port_device, write_txd))
