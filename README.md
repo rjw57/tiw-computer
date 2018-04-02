@@ -4,7 +4,7 @@
 
 ```console
 $ make emulator
-$ ./emulator/mame64 -debug -window tiw
+$ ./emulator/mame64 -debug -window tiw -rs232a terminal
 ```
 
 ## Updating MAME
