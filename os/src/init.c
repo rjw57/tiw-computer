@@ -1,9 +1,7 @@
 #include "interrupt.h"
 #include "types.h"
 
-// Defined by linker
-extern u8 *_DATA_RUN__, *_DATA_LOAD__;
-extern u16 _DATA_SIZE__;
+#include "ns16450.h"
 
 // Entry point for OS. When called interrupts are disabled, zero-page is
 // initialised to zero and the stack pointer is set up.
@@ -16,22 +14,22 @@ void idle(void);
 
 void init(void) {
     // initialise hw peripherals
-//    acia1_init();
-//    vdp1_init();
+    ns16450_a_init();
 
     // enable interrupts
-//    IRQ_ENABLE();
+    IRQ_ENABLE();
 
-//    puts("Hello, world\n");
+    ns16450_a_send('T');
+    ns16450_a_send('I');
+    ns16450_a_send('W');
+    ns16450_a_send('\r');
+    ns16450_a_send('\n');
 
     // loop forever
     while(1) { idle(); }
 }
 
 void idle(void) {
-    // Poll ACIA
-//    i16 recv_byte = acia1_recv();
-//    if(recv_byte >= 0) {
-//        acia1_send(recv_byte);
-//    }
+    ns16450_a_wait_rxd_full();
+    ns16450_a_send(ns16450_a_recv());
 }
