@@ -12,9 +12,9 @@ void ns16450_a_init(void)
     // Enable access to DRAB
     NS16450_A_WRITE_REG(NS16450_REG_LINE_CTRL, 0x80);
 
-    // Set divisor for 9600 baud assuming 1.8432MHz crystal
-    NS16450_A_WRITE_REG(NS16450_REG_DIVISOR_LSB, 12);
-    NS16450_A_WRITE_REG(NS16450_REG_DIVISOR_MSB, 0);
+    // Set divisor for 9600 baud assuming 6.144MHz crystal = 40d = 28h
+    NS16450_A_WRITE_REG(NS16450_REG_DIVISOR_LSB, 0x28);
+    NS16450_A_WRITE_REG(NS16450_REG_DIVISOR_MSB, 0x00);
 
     // Set line mode, disabling DRAB access
     NS16450_A_WRITE_REG(NS16450_REG_LINE_CTRL, 0x03);
