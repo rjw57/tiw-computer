@@ -6,3 +6,17 @@
 $ make emulator
 $ ./emulator/mame64 -debug -window tiw
 ```
+
+## Updating MAME
+
+Warm up object store
+
+```console
+$ git fetch https://github.com/mamedev/mame master
+```
+
+Do pull
+
+```console
+$ git subtree pull -P emulator --squash https://github.com/mamedev/mame master
+```
