@@ -2154,6 +2154,7 @@ files {
 	MAME_DIR .. "src/mame/drivers/slc1.cpp",
 	MAME_DIR .. "src/mame/drivers/uzebox.cpp",
 	MAME_DIR .. "src/mame/drivers/z80dev.cpp",
+	MAME_DIR .. "src/mame/drivers/tiw.cpp",
 }
 
 createMESSProjects(_target, _subtarget, "homelab")

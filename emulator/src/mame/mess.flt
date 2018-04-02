@@ -708,6 +708,7 @@ tim100.cpp
 timex.cpp
 tispeak.cpp
 tispellb.cpp
+tiw.cpp
 tk2000.cpp
 tk80.cpp
 tk80bs.cpp
