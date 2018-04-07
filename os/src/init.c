@@ -15,10 +15,16 @@ void init(void);
 // Idle loop routine. Called repeatedly until the end of time.
 void idle(void);
 
+extern u8* screen = (u8*)(void*)(0x400);
+
 void init(void) {
     // initialise hw peripherals
     ns16450_a_init();
     crt6845_init(CRTC6845_MODE_1);
+
+    screen[0] = 'T';
+    screen[1] = 'I';
+    screen[2] = 'W';
 
     // enable interrupts
     IRQ_ENABLE();

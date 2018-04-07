@@ -3,8 +3,9 @@
 
 #include "types.h"
 
-extern u8 CRTC6845_MODE_1[];
+extern const u8 CRTC6845_MODE_1[];
 
-void crt6845_init(u8 mode[]);
+void crt6845_init(const u8 mode[]);
+void crt6845_set_screen_start(void* p);
 
 #endif // CRTC6845_H__

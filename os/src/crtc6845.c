@@ -1,7 +1,7 @@
 #include "crtc6845.h"
 #include "types.h"
 
-u8 CRTC6845_MODE_1[16] = {
+const u8 CRTC6845_MODE_1[8] = {
     0x68, // horiz total
     0x50, // horiz disp
     0x52, // hsync pos
@@ -10,11 +10,14 @@ u8 CRTC6845_MODE_1[16] = {
     0x04, // vert adjust
     0x1E, // vert displayed
     0x1E, // vsync pos
+};
+
+static const u8 CRTC6845_INIT[8] = {
     0x00, // interlace mode
     0x0F, // max row addr
     0x00, // cursor start
     0x00, // cursor end
-    0x00, // start addr (H)
+    0x04, // start addr (H)
     0x00, // start addr (L)
     0x00, // cursor (H)
     0x00, // cursor (L)
@@ -28,9 +31,10 @@ u8 CRTC6845_MODE_1[16] = {
     __asm__("sta __CRTC6845_START__ + 1"); \
 } while(0)
 
-void crt6845_init(u8 mode[]) {
+void crt6845_init(const u8 mode[]) {
     u8 i;
-    for(i=0; i<=9; ++i) {
+    for(i=0; i<8; ++i) {
         CRTC6845_WRITE_REG(i, mode[i]);
+        CRTC6845_WRITE_REG(i+8, CRTC6845_INIT[i]);
     }
 }
