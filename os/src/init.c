@@ -82,8 +82,27 @@ void idle(void) {
             ++buf;
             for(; *buf == ' '; ++buf) { }
             arg1 = parse_hex(buf, &count); buf+=count;
-            print_hex(*((u8*)(void*)arg1), 2);
-            println("");
+            for(; *buf == ' '; ++buf) { }
+            if(*buf != '\0') {
+                arg2 = parse_hex(buf, &count); buf+=count;
+            } else {
+                arg2 = 1;
+            }
+            for(count=0; arg2 > 0; ++arg1, --arg2, ++count) {
+                if(count==0) {
+                    print_hex(arg1, 4);
+                    ns16450_a_send(':');
+                    ns16450_a_send(' ');
+                }
+                print_hex(*((u8*)(void*)arg1), 2);
+                if(count==0xF) {
+                    println("");
+                    count = 0xFF;
+                } else {
+                    ns16450_a_send(' ');
+                }
+            }
+            if(count != 0x0) { println(""); }
             break;
         case 'w':
             // write bytes

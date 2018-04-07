@@ -8,6 +8,7 @@
 #define ASCII_BS    ((u8)0x08)
 #define ASCII_LF    ((u8)0x0A)
 #define ASCII_CR    ((u8)0x0D)
+#define ASCII_DEL   ((u8)0x7F)
 
 bool ascii_is_printable(u8 c);
 

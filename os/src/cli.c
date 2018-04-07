@@ -25,7 +25,7 @@ void cli_get(void) {
         ch = ns16450_a_recv();
 
         // Special character handling
-        if(ch == ASCII_BS) {
+        if((ch == ASCII_BS) || (ch == ASCII_DEL)) {
             // backspace
             if(cli_insert > 0) {
                 // if buffer isn't empty...
