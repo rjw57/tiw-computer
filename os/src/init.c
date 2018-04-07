@@ -4,6 +4,7 @@
 #include "cli.h"
 
 #include "ns16450.h"
+#include "crtc6845.h"
 
 // Entry point for OS. When called interrupts are disabled, zero-page is
 // initialised to zero and the stack pointer is set up.
@@ -17,6 +18,7 @@ void idle(void);
 void init(void) {
     // initialise hw peripherals
     ns16450_a_init();
+    crt6845_init(CRTC6845_MODE_1);
 
     // enable interrupts
     IRQ_ENABLE();
