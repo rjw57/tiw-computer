@@ -59,7 +59,7 @@ later version.
 *******************************************************************/
 
 
-`include "sdrc_define.v"
+`include "../core/sdrc_define.v"
 module sdrc_top 
            (
                     cfg_sdr_width       ,

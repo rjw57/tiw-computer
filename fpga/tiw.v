@@ -12,6 +12,7 @@ module tiw (
 	output [5:0] VG,		// video green signal
 	output [4:0] VB,		// video blue signal
 	
+	// 7-segment display
 	output reg [7:0] SEG,
 	output reg [3:0] DIGIT
 	);

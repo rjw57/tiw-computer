@@ -36,8 +36,13 @@ ROM #( .ADDR_WIDTH(13), .CONTENTS_FILE("../os/rom.txt") ) ( .addr(A[12:0]), .clk
 // 8KB RAM
 wire RAM_SEL;
 wire [7:0] RAM_Q;
+wire [12:0] VRAM_A;
+wire [7:0] VRAM_Q;
 assign RAM_SEL = A[15:13] == 3'b000;
-RAM #( .ADDR_WIDTH(13) ) ( .data(DI), .addr(A[12:0]), .clk(CLK), .we(RAM_SEL & (~Wr_n)), .q(RAM_Q) );
+RAM #( .ADDR_WIDTH(13) ) (
+	.data_a(DI), .addr_a(A[12:0]), .clk_a(CLK), .we_a(RAM_SEL & (~Wr_n)), .q_a(RAM_Q),
+	.data_b(8'b0), .addr_b(VRAM_A), .clk_b(CLK), .we_b(1'b0), .q_b(VRAM_Q)
+);
 
 // UART
 wire BaudOut;
@@ -53,46 +58,19 @@ T16450 (
 	.BaudOut(BaudOut)
 );
 
-
-// Video clocks
-wire CHAR_CLK;
-reg [2:0] counter = 0;
-assign CHAR_CLK = counter[2];
-always @(posedge DOT_CLK)
-begin
-	counter <= counter + 3'b1;
-end
-
-// CRTC
-wire CRTC_SEL;
-wire CRTC_DE;
-wire [7:0] CRTC_Q;
 // CRTC at $D010-$D011
+wire CRTC_SEL;
+wire [7:0] CRTC_Q;
 assign CRTC_SEL = A[15:1] == 15'b1101_0000_0001_000;
 
-wire [4:0] RA;
-wire [13:0] MA;
-
-/*
-crtc6845 (
-	.LPSTBn(1'b0),	.RESETn(RESET_n),	.REG_INIT(1'b0),
-	.CLK(CHAR_CLK),
-	.E(CLK), .RS(A[0]), .CSn(~(CRTC_SEL & PHI2)), .RW(R_W_n), .DI(DI), .DO(CRTC_Q),
-	.HSYNC(HSYNC), .VSYNC(VSYNC), .DE(CRTC_DE),
-	.MA(MA), .RA(RA)
+video (
+	.CLK(CLK),
+	.RESET_n(RESET_n),
+	.SEL(CRTC_SEL), .A(A[0]), .R_W_n(R_W_n), .DI(DI), .DO(CRTC_Q),
+	.DOT_CLK(DOT_CLK),
+	.VRAM_A(VRAM_A), .VRAM_Q(VRAM_Q),
+	.HSYNC(HSYNC), .VSYNC(VSYNC), .VR(VR), .VG(VG), .VB(VB)
 );
-*/
-
-mc6845 (
-	.LPSTB(1'b0), .nRESET(RESET_n), .CLOCK(CHAR_CLK), .CLKEN(1'b1),
-	.ENABLE(CRTC_SEL), .RS(A[0]), .R_nW(R_W_n), .DI(DI), .DO(CRTC_Q),
-	.HSYNC(HSYNC), .VSYNC(VSYNC), .DE(CRTC_DE),
-	.MA(MA), .RA(RA)
-);
-
-assign VR = CRTC_DE ? RA : 5'b0;
-assign VG = CRTC_DE ? MA[5:0] : 6'b0;
-assign VB = CRTC_DE ? 5'b00000 : 5'b0;
 
 // Mux data lines
 always @(posedge CLK)

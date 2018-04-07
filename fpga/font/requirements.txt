@@ -1,0 +1,8 @@
+ipython
+jupyter
+numpy
+imageio
+intelhex
+
+matplotlib
+pillow
