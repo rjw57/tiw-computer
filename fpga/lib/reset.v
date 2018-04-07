@@ -4,24 +4,26 @@ module reset (
 	output reg reset = 1'b1
 	);
 	
-reg [1:0] counter = 2'b00;
+reg [8:0] counter = 9'b0;
 
 always @(posedge CLK, posedge reset_req)
 begin
 	if(reset_req)
 	begin
-		counter <= 2'b00;
+		counter <= 'b0;
 		reset <= 1'b1;
 	end
 	else
 	begin
-		if(counter !== 2'b11)
+		if(&counter)
 		begin
-			counter <= counter + 2'b01;
-			reset <= 1'b1;
+			reset <= 1'b0;
 		end
 		else
-			reset <= 1'b0;
+		begin
+			counter <= counter + 1;
+			reset <= 1'b1;
+		end
 	end
 end
 	

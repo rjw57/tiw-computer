@@ -5,6 +5,13 @@ module tiw (
 	input UART_IN,
 	output UART_OUT,
 	
+	// Video
+	output HSYNC,			// horizontol sync output
+	output VSYNC,			// vertical sync output
+	output [4:0] VR,		// video red signal
+	output [5:0] VG,		// video green signal
+	output [4:0] VB,		// video blue signal
+	
 	output reg [7:0] SEG,
 	output reg [3:0] DIGIT
 	);
@@ -12,7 +19,8 @@ module tiw (
 // Clocks
 wire CLK_6_144M;
 wire CLK_4M;
-pll (.inclk0(CLK_48M), .c0(CLK_6_144M), .c1(CLK_4M));
+wire DOT_CLK;
+pll (.inclk0(CLK_48M), .c0(CLK_6_144M), .c1(CLK_4M), .c2(DOT_CLK));
 	
 wire PHI2;			// processor clock
 wire RESET;			// reset signal
@@ -74,10 +82,13 @@ T65 (
 
 // IO
 IO (
-	.CLK(CLK_48M),	.PHI2(PHI2), .UART_CLK(CLK_6_144M), .RESET_n(~RESET),
+	.CLK(CLK_48M),	.PHI2(PHI2), .UART_CLK(CLK_6_144M), .DOT_CLK(DOT_CLK),
+	.RESET_n(~RESET),
 	.A(A), .DI(DO), .DO(DI), .R_W_n(R_W_n),
 	
-	.UART_IN(UART_IN), .UART_OUT(UART_OUT)
+	.UART_IN(UART_IN), .UART_OUT(UART_OUT),
+	
+	.VR(VR), .VG(VG), .VB(VB), .HSYNC(HSYNC), .VSYNC(VSYNC)
 );
 	
 endmodule

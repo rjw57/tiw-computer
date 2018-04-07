@@ -69,6 +69,20 @@ set_location_assignment PIN_24 -to CLK_48M
 set_global_assignment -name ENABLE_SIGNALTAP ON
 set_global_assignment -name USE_SIGNALTAP_FILE output_files/stp1.stp
 set_global_assignment -name SLD_FILE /home/rjw57/projects/fpga/t65/output_files/stp1_auto_stripped.stp
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_location_assignment PIN_87 -to UART_IN
+set_location_assignment PIN_86 -to UART_OUT
+set_global_assignment -name USE_CONFIGURATION_DEVICE OFF
+set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+set_global_assignment -name VHDL_FILE crtc6845/cursor.vhd
+set_global_assignment -name VHDL_FILE crtc6845/crtc6845.vhd
+set_global_assignment -name VHDL_FILE crtc6845/config.vhd
 set_global_assignment -name QIP_FILE lib/pll.qip
 set_global_assignment -name VERILOG_FILE lib/reset.v
 set_global_assignment -name VERILOG_FILE lib/display_7_seg.v
@@ -82,18 +96,29 @@ set_global_assignment -name VERILOG_FILE tiw.v
 set_global_assignment -name VERILOG_FILE ROM.v
 set_global_assignment -name VERILOG_FILE RAM.v
 set_global_assignment -name VERILOG_FILE lib/decoder_7_seg.v
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_location_assignment PIN_87 -to UART_IN
-set_location_assignment PIN_86 -to UART_OUT
-set_global_assignment -name USE_CONFIGURATION_DEVICE OFF
-set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
-set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
-set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
-set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
-set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
 set_global_assignment -name VERILOG_FILE IO.v
 set_global_assignment -name QIP_FILE flash_loader.qip
 set_global_assignment -name CDF_FILE output_files/flash.cdf
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_location_assignment PIN_100 -to HSYNC
+set_location_assignment PIN_101 -to VSYNC
+set_location_assignment PIN_106 -to VB[3]
+set_location_assignment PIN_105 -to VB[2]
+set_location_assignment PIN_104 -to VB[1]
+set_location_assignment PIN_103 -to VB[0]
+set_location_assignment PIN_115 -to VG[4]
+set_location_assignment PIN_114 -to VG[3]
+set_location_assignment PIN_113 -to VG[2]
+set_location_assignment PIN_112 -to VG[1]
+set_location_assignment PIN_111 -to VG[0]
+set_location_assignment PIN_110 -to VB[4]
+set_location_assignment PIN_126 -to VR[4]
+set_location_assignment PIN_125 -to VR[3]
+set_location_assignment PIN_124 -to VR[2]
+set_location_assignment PIN_121 -to VR[1]
+set_location_assignment PIN_120 -to VR[0]
+set_location_assignment PIN_119 -to VG[5]
+set_global_assignment -name CYCLONEII_RESERVE_NCEO_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name VHDL_FILE mc6845.vhd
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
