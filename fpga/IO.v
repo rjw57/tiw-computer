@@ -1,6 +1,7 @@
 module IO (
 	input CLK,				// FPGA clock
 	input PHI2,				// processor clock
+	input UART_CLK,		// UART clock
 	input RESET_n,			// inverted reset signal
 	input [15:0] A,		// address bus
 	input [7:0] DI,		// data bus input
@@ -36,7 +37,7 @@ wire UART_SEL;
 wire [7:0] UART_Q;
 assign UART_SEL = A[15:13] == 3'b110;
 T16450 (
-	.MR_n(RESET_n), .XIn(PHI2), .RClk(BaudOut),
+	.MR_n(RESET_n), .XIn(UART_CLK), .RClk(BaudOut),
 	.CS_n(~UART_SEL), .Rd_n(Rd_n), .Wr_n(Wr_n),
 	.A(A[2:0]), .D_In(DI), .D_Out(UART_Q),
 	.SIn(UART_IN), .SOut(UART_OUT),

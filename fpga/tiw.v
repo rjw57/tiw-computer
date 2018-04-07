@@ -11,7 +11,8 @@ module tiw (
 
 // Clocks
 wire CLK_6_144M;
-pll (.inclk0(CLK_48M), .c0(CLK_6_144M));
+wire CLK_4M;
+pll (.inclk0(CLK_48M), .c0(CLK_6_144M), .c1(CLK_4M));
 	
 wire PHI2;			// processor clock
 wire RESET;			// reset signal
@@ -29,7 +30,7 @@ debouncer (.CLK(CLK_48M), .switch_input(KEY[2]), .state(DEBOUNCED_KEY[2]));
 debouncer (.CLK(CLK_48M), .switch_input(KEY[3]), .state(DEBOUNCED_KEY[3]));
 
 // Processor clock source for single stepping
-assign PHI2 = DEBOUNCED_KEY[0] ? CLK_6_144M : ~DEBOUNCED_KEY[2];
+assign PHI2 = DEBOUNCED_KEY[0] ? CLK_4M : ~DEBOUNCED_KEY[2];
 
 // Reset key
 reset ( .CLK(PHI2), .reset_req(~DEBOUNCED_KEY[3]), .reset(RESET) );
@@ -73,7 +74,7 @@ T65 (
 
 // IO
 IO (
-	.CLK(CLK_48M),	.PHI2(PHI2), .RESET_n(~RESET),
+	.CLK(CLK_48M),	.PHI2(PHI2), .UART_CLK(CLK_6_144M), .RESET_n(~RESET),
 	.A(A), .DI(DO), .DO(DI), .R_W_n(R_W_n),
 	
 	.UART_IN(UART_IN), .UART_OUT(UART_OUT)
