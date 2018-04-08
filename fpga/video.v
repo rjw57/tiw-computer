@@ -9,11 +9,11 @@ module video (
 	output [7:0] DO,			// data bus out
 
 	input DOT_CLK, 			// video clock
-	output HSYNC,				// horizontal sync output
-	output VSYNC,				// vertical sync output
-	output [4:0] VR,			// video red signal
-	output [5:0] VG,			// video green signal
-	output [4:0] VB,			// video blue signal
+	output reg HSYNC,				// horizontal sync output
+	output reg VSYNC,				// vertical sync output
+	output reg [4:0] VR,			// video red signal
+	output reg [5:0] VG,			// video green signal
+	output reg [4:0] VB,			// video blue signal
 	
 	output [12:0] VRAM_A,
 	input [7:0] VRAM_Q
@@ -36,13 +36,13 @@ wire [10:0] CHAR_ROM_A;
 ROM #( .ADDR_WIDTH(13), .CONTENTS_FILE("./font/font.txt") ) ( .addr(CHAR_ROM_A), .clk(CLK), .q(CHAR_ROM_Q) );
 
 // CRTC
-wire CRTC_DE;
+wire CRTC_DE, CRTC_HS, CRTC_VS;
 wire [4:0] RA;
 wire [13:0] MA;
 mc6845 (
 	.LPSTB(1'b0), .nRESET(RESET_n), .CLOCK(CHAR_CLK), .CLKEN(1'b1),
 	.ENABLE(SEL), .RS(A), .R_nW(R_W_n), .DI(DI), .DO(DO),
-	.HSYNC(HSYNC), .VSYNC(VSYNC), .DE(CRTC_DE),
+	.HSYNC(CRTC_HS), .VSYNC(CRTC_VS), .DE(CRTC_DE),
 	.MA(MA), .RA(RA)
 );
 
@@ -50,22 +50,40 @@ assign CHAR_ROM_A[2:0] = RA[3:1];
 assign CHAR_ROM_A[10:3] = VRAM_Q;
 assign VRAM_A = MA[12:0];
 
-wire px;
-reg [7:0] char_row;
-reg [2:0] char_col_counter = 0;
-assign px = ~char_row[7-char_col_counter];
-assign VR = (CRTC_DE & px) ? 5'b11111 : 5'b0;
-assign VG = (CRTC_DE & px) ? 6'b111111 : 6'b0;
-assign VB = (CRTC_DE & px) ? 5'b11111 : 5'b0;
-
+// Wait for half the character clock for retrieved character row to stabilise
+reg DE;
 always @(posedge CHAR_CLK)
 begin
 	char_row <= CHAR_ROM_Q;
+	HSYNC <= CRTC_HS;
+	VSYNC <= CRTC_VS;
+	DE <= CRTC_DE;
+end
+
+wire px;
+reg [7:0] char_row;
+reg [2:0] char_col_counter = 0;
+assign px = char_row[7-char_col_counter];
+
+always @(posedge DOT_CLK)
+begin
+	if(~DE)
+	begin
+		VR <= 'b0;
+		VG <= 'b0;
+		VB <= 'b1;
+	end
+	else
+	begin
+		VR <= px ? 5'b11111 : 5'b0;
+		VG <= px ? 6'b111111 : 6'b0;
+		VB <= 5'b11111;
+	end
 end
 
 always @(posedge DOT_CLK)
 begin
-	if(~CRTC_DE)
+	if(~DE)
 	begin
 		char_col_counter <= 0;
 	end
